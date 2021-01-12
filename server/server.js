@@ -25,8 +25,32 @@ app.use('/css', express.static(path.resolve(publicDir + '/css')));
 app.use('/photo', express.static(path.resolve(publicDir + '/photo')));
 app.use('/js', express.static(path.resolve(publicDir + '/js')));
 
-let allPages = ["/login", "/register", "/index", "/test"]
-let authPages = ["/index", "/test"]
+let allPages = ["/login", "/register", "/index", "/test", "/ranking"];
+let authPages = ["/index", "/test"];
+
+app.get('/rankings', (req, res) => {
+    Query('SELECT * FROM `users` ORDER BY best_score DESC, best_time').then((rows) => {
+        let users = [];
+        let scores = [];
+        let times = [];
+        for (i in rows) {
+            if (rows[i].best_score == 0)
+                continue;
+            users.push(rows[i].username);
+            scores.push(rows[i].best_score);
+            times.push(rows[i].best_time);
+        }
+        return res.status(200).send({
+            user: users,
+            score: scores,
+            time: times
+        });
+    }).catch(() => {
+        return res.status(400).send({
+            message: "Грешка в базата данни"
+        });
+    });
+})
 
 app.get('/questions', (req, res) => {
     if (!req.session.logged) {

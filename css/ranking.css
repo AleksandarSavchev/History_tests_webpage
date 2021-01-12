@@ -1,0 +1,25 @@
+table {
+    margin: auto;
+    margin-top: 4rem;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: center;
+}
+
+.r1 {
+    width: 25rem;
+}
+
+.r2 {
+    width: 5rem;
+}
+
+.r3 {
+    width: 10rem;
+}
