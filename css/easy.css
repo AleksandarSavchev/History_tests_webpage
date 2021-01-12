@@ -1,0 +1,161 @@
+#cont {
+    font-family: arial;
+    margin: auto;
+    justify-content: center;
+    text-align: center;
+    font-size: 22px;
+    width: 1200px;
+    height: auto;
+}
+
+.link {
+    position: fixed;
+}
+
+#home {
+    margin-left: 480px;
+    width: 40px;
+    height: auto;
+}
+
+#help {
+    margin-left: 520px;
+    width: 40px;
+    height: auto;
+}
+
+#title {
+    padding-top: 20px;
+    padding-bottom: 10px;
+    padding-left: 60px;
+}
+
+#bar {
+    position: fixed;
+    margin-top: 50px;
+    width: 210px;
+    height: 270px;
+    background-color: rgb(207, 209, 243);
+    border: 5px rgb(172, 176, 235) solid;
+    text-align: center;
+}
+
+#submit {
+    font-size: 25px;
+    background-color: rgb(222, 223, 243);
+    border: 3px rgb(172, 176, 235) solid;
+    margin-top: 15px;
+    padding: 5px 15px;
+}
+
+#cont2 {
+    justify-content: center;
+    text-align: center;
+    font-size: 22px;
+    width: 800px;
+    height: auto;
+    padding-left: 10px;
+    margin-left: 250px;
+    position: relative;
+}
+
+.question {
+    margin-left: 15px;
+    width: 750px;
+    background-color: rgb(207, 209, 243);
+    border: 3px rgb(172, 176, 235) solid;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+}
+
+.qtext {
+    padding-top: 5px;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+.label {
+    display: inline-block;
+    margin: 5px;
+    height: auto;
+    width: 400px;
+    padding-top: 7px;
+    padding-left: 5px;
+    text-align: left;
+    background-color: rgb(222, 223, 243);
+    border: 3px rgb(172, 176, 235) solid;
+}
+
+input:checked + label {
+    background-color: rgb(172, 176, 235);
+}
+
+#end {
+    position: absolute;
+    top: 0px;
+    text-align: left;
+    margin-left: 15px;
+    padding-left: 15px;
+    padding-top: 20px;
+    width: 725px;
+    height: auto;
+    display: none;
+}
+
+.info {
+    background-color: rgb(207, 209, 243);
+    border: 3px rgb(172, 176, 235) solid;
+    margin-bottom: 15px;
+}
+
+.white {
+    white-space: pre;
+}
+
+.time {
+    margin-left: 15px;
+    width: 750px;
+    background-color: rgb(207, 209, 243);
+    border: 3px rgb(172, 176, 235) solid;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+}
+
+#time_table {
+    width: 600px;
+    height: auto;
+}
+
+.square {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    font-size: 22px;
+}
+
+#dont {
+    color: red;
+    visibility: hidden;
+}
+
+#n10 {
+    margin-right: 90px;
+}
+#n11 {
+    margin-right: 30px;
+}
+#n12 {
+    margin-right: 85px;
+}
+#n13 {
+    margin-left: 10px;
+    margin-right: 20px;
+}
+
+#n14 {
+    margin-left: 15px;
+    margin-right: 85px;
+}

@@ -1,0 +1,39 @@
+* {
+    font-family: Helvetica, sans-serif;
+}
+
+#cont {
+    position: absolute;
+    max-width: 30rem;
+    width: 90%;
+    background-color: rgb(207, 209, 243);
+    border: 5px rgb(172, 176, 235) solid;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#form {
+    margin: 35px 30px 35px 30px;
+    width: 100%;
+}
+
+.input {
+    width: 90%;
+    height: 2rem;
+    margin-bottom: 15px;
+}
+
+#submit {
+    height: 2rem;
+    width: 4rem;
+    background-color: rgb(207, 209, 243);
+    border: 3px rgb(172, 176, 235) solid;
+    margin-left: 15rem;
+}
+
+#err {
+    margin: 10px 30px 10px 30px;
+    color: red;
+    display: none;
+}
