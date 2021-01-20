@@ -25,8 +25,8 @@ app.use('/css', express.static(path.resolve(publicDir + '/css')));
 app.use('/photo', express.static(path.resolve(publicDir + '/photo')));
 app.use('/js', express.static(path.resolve(publicDir + '/js')));
 
-let allPages = ["/login", "/register", "/index", "/test", "/ranking"];
-let authPages = ["/index", "/test"];
+let allPages = ["/login", "/register", "/home", "/test", "/ranking"];
+let authPages = ["/home", "/test"];
 
 app.get('/rankings', (req, res) => {
     Query('SELECT * FROM `users` ORDER BY best_score DESC, best_time').then((rows) => {
@@ -89,13 +89,17 @@ app.get('/questions', (req, res) => {
     });
 })
 
+app.get('/favicon.ico', (req, res) => res.status(204));
+
 app.get('*', (req, res) => {
     let page = req.url.split('?')[0];
     if (allPages.includes(page)) {
         if (authPages.includes(page) && !req.session.logged) {
             res.sendFile(path.resolve(publicDir + "/login.html"));
         }
-        res.sendFile(path.resolve(publicDir + page + ".html"));
+        else {
+            res.sendFile(path.resolve(publicDir + page + ".html"));
+        }
     } else {
         res.sendFile(path.resolve(publicDir + "/404.html"));
     }

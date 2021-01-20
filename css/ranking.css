@@ -1,3 +1,13 @@
+.link {
+    position: fixed;
+}
+
+#home {
+    margin: auto;
+    width: 40px;
+    height: auto;
+}
+
 table {
     margin: auto;
     margin-top: 4rem;
