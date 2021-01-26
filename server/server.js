@@ -26,7 +26,7 @@ app.use('/photo', express.static(path.resolve(publicDir + '/photo')));
 app.use('/js', express.static(path.resolve(publicDir + '/js')));
 
 let allPages = ["/login", "/register", "/home", "/test", "/ranking"];
-let authPages = ["/home", "/test"];
+let authPages = ["/home", "/test", "/ranking"];
 
 app.get('/rankings', (req, res) => {
     Query('SELECT * FROM `users` ORDER BY best_score DESC, best_time').then((rows) => {

@@ -8,14 +8,17 @@ body {
 
 #container {
     text-align:center;
-    
 }
 
-#link {
-    padding-left: 1230px;
+#choose{
+    padding-left: 1200px;
 }
 
-#help {
+.link {
+    display: inline-block;
+}
+
+.choose {
     width:40px;
     height: auto;
 }

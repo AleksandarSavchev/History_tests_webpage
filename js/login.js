@@ -15,7 +15,7 @@ document.getElementById("submit").addEventListener("click", function (event) {
                 return Promise.reject(response.json());
         })
         .then(() => {
-            window.location.href = "http://localhost:3000/index";
+            window.location.href = "http://localhost:3000/home";
         })
         .catch((err) => err.then(errData => {
             const errEl = document.getElementById("err");

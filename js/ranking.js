@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return `
         <th class="r1">${++num}. ${username}</th>
         <th class="r2">${score}</th>
-        <th class="r3">${time}</th>`;
+        <th class="r3">${time / 1000}</th>`;
     }
     let table = document.getElementById("tabl");
     fetch(`http://localhost:3000/rankings`, {
