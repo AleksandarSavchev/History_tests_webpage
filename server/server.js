@@ -34,7 +34,7 @@ app.get('/rankings', (req, res) => {
         let scores = [];
         let times = [];
         for (i in rows) {
-            if (rows[i].best_score == 0)
+            if (rows[i].best_score == 0 || rows[i].best_time == 0)
                 continue;
             users.push(rows[i].username);
             scores.push(rows[i].best_score);
@@ -167,6 +167,10 @@ app.post('/login', (req, res) => {
             return res.status(400).send({
                 message: "Грешна парола!"
             });
+    }).catch(() => {
+        return res.status(400).send({
+            message: "Грешка в базата данни"
+        });
     });
 })
 
@@ -191,6 +195,10 @@ app.post('/register', (req, res) => {
             return res.status(400).send({
                 message: 'Потребителското име е заето!'
             });
+    }).catch(() => {
+        return res.status(400).send({
+            message: "Грешка в базата данни"
+        });
     });
     password = passwordHash.generate(password);
     Query('INSERT INTO `users` (`username`, `password`) VALUES (?, ?);', username, password).then(() => {
