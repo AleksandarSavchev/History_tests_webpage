@@ -34,7 +34,7 @@ app.get('/rankings', (req, res) => {
         let scores = [];
         let times = [];
         for (i in rows) {
-            if (rows[i].best_score == 0 || rows[i].best_time == 0)
+            if (rows[i].best_time == 0 || rows[i].best_score == undefined)
                 continue;
             users.push(rows[i].username);
             scores.push(rows[i].best_score);
