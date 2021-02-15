@@ -18,12 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
 <label for="${"opt" + num + 4}" class="label">
     г) ${question.q_ans[3]}
 </label>
-</div>`;//vueJS, lit-html, server side
+</div>`; //vueJS, lit-html, server side
     }
     let form = document.getElementById("quiz");
     fetch(`http://localhost:3000/questions`, {
-        method: "GET",
-    })
+            method: "GET",
+        })
         .then(response => {
             if (!response.ok)
                 return Promise.reject(response.json());
@@ -50,35 +50,36 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 let end = false;
-document.getElementById("submit").addEventListener("click", function (event) {
+document.getElementById("submit").addEventListener("click", function(event) {
     event.preventDefault;
     //<span id="endt">Сгрешени въпроси: </span><span id="errors"></span><br><br>
     const tipTemplate = (question) => {
         return `<div class="info">
         <span >${" " + question.q_text}</span><br><br>
         Кратка подсказка: ${question.q_expl}<br><br>
-    </div>` }
+    </div>`
+    }
     let form = document.getElementById('quiz');
     let ans = [];
-    for(let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 10; i++) {
         ans.push(form["q" + i].value);
     }
-    let data = { q_ans: ans};
+    let data = { q_ans: ans };
     fetch(`http://localhost:3000/grade`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-              },
+            },
             body: JSON.stringify(data),
         })
         .then(response => {
-            console.log(response.ok)
             if (!response.ok)
                 return Promise.reject(response.json());
-            else 
+            else
                 return Promise.resolve(response.json());
         })
         .then((res) => {
+            console.log(res);
             let cont = document.getElementById("end");
             let question = {}
             for (i in res.q_text) {
@@ -91,9 +92,9 @@ document.getElementById("submit").addEventListener("click", function (event) {
                 cont.appendChild(div);
             }
             let elScore = document.getElementById("score");
-            elScore.innerHTML = `Точки: ${res.score} от 10`;
+            elScore.innerHTML = `Точки: ${res.score} от ${res.max_score}`;
             if (res.score == 10)
-                document.getElementById("endt").innerHTML="";
+                document.getElementById("endt").innerHTML = "";
             end = true;
 
             form.style.display = "none";
@@ -117,8 +118,7 @@ function timer() {
         min++;
         document.getElementById("min").innerHTML = min;
         document.getElementById("sec").innerHTML = sec;
-    }
-    else {
+    } else {
         sec++;
         if (sec / 10 < 1) {
             sec = "0" + sec;
