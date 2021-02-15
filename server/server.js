@@ -25,8 +25,8 @@ app.use('/css', express.static(path.resolve(publicDir + '/css')));
 app.use('/photo', express.static(path.resolve(publicDir + '/photo')));
 app.use('/js', express.static(path.resolve(publicDir + '/js')));
 
-let allPages = ["/login", "/register", "/home", "/test", "/ranking"];
-let authPages = ["/home", "/test", "/ranking"];
+let allPages = ["/login", "/register", "/home", "/difficulty", "/test", "/ranking"];
+let authPages = ["/home", "/difficulty", "/test", "/ranking"];
 
 app.get('/rankings', (req, res) => {
     Query('SELECT * FROM `users` ORDER BY best_score DESC, best_time').then((rows) => {
@@ -34,7 +34,7 @@ app.get('/rankings', (req, res) => {
         let scores = [];
         let times = [];
         for (i in rows) {
-            if (rows[i].best_time == 0 || rows[i].best_score == undefined)
+            if (!rows[i].best_time || !rows[i].best_score)
                 continue;
             users.push(rows[i].username);
             scores.push(rows[i].best_score);
@@ -55,8 +55,10 @@ app.get('/rankings', (req, res) => {
 app.get('/questions', (req, res) => {
     if (!req.session.logged) {
         res.sendFile(path.resolve(publicDir + "/login.html"));
+    } else if (!req.session.diff) {
+        res.sendFile(path.resolve(publicDir + "/home.html"));
     }
-    Query('SELECT * FROM `questions` ORDER BY RAND() LIMIT 10').then((rows) => {
+    Query('SELECT * FROM `questions` WHERE ID >= ? AND ID < ? ORDER BY RAND() LIMIT 10', 1 + 10 * req.session.diff, 15 + 10 * req.session.diff).then((rows) => {
         let q_text = [];
         let q_ans = [];
         let q_expl = [];
@@ -89,6 +91,15 @@ app.get('/questions', (req, res) => {
     });
 })
 
+app.get('/test', (req, res) => {
+    if (req.session.logged) {
+        req.session.diff = req.query.diff;
+        res.sendFile(path.resolve(publicDir + "/test.html"));
+    } else {
+        res.sendFile(path.resolve(publicDir + "/login.html"));
+    }
+})
+
 app.get('/favicon.ico', (req, res) => res.status(204));
 
 app.get('*', (req, res) => {
@@ -96,8 +107,7 @@ app.get('*', (req, res) => {
     if (allPages.includes(page)) {
         if (authPages.includes(page) && !req.session.logged) {
             res.sendFile(path.resolve(publicDir + "/login.html"));
-        }
-        else {
+        } else {
             res.sendFile(path.resolve(publicDir + page + ".html"));
         }
     } else {
@@ -124,12 +134,15 @@ app.post('/grade', (req, res) => {
         }
     }
     req.session.quiz.active = false;
+    score = score * (1 + parseInt(req.session.diff));
+    let max_socre = 10 + 10 * req.session.diff;
     if (score > req.session.score || (score == req.session.score && req.session.time > time)) {
         Query('Update `users` SET `best_score` = ?, `best_time` = ? WHERE `username` = ?', score, time, req.session.username).then(() => {
             req.session.score = score;
             req.session.time = time;
             return res.status(200).send({
                 score: score,
+                max_score: max_socre,
                 q_text: q_text,
                 q_expl: q_expl
             });
@@ -141,6 +154,7 @@ app.post('/grade', (req, res) => {
     }
     return res.status(200).send({
         score: score,
+        max_score: max_socre,
         q_text: q_text,
         q_expl: q_expl
     });
@@ -230,7 +244,7 @@ app.post('/logout', (req, res) => {
 
 function Query(query, ...args) {
     return new Promise((resolve, reject) => {
-        connection.query(query, args, function (err, rows) {
+        connection.query(query, args, function(err, rows) {
             if (err) reject(err);
 
             resolve(rows);
