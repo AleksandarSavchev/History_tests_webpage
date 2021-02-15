@@ -1,0 +1,45 @@
+#cont {
+    font-family: arial;
+    margin: auto;
+    margin-top: 20px;
+    justify-content: center;
+    text-align: center;
+    font-size: 22px;
+    width: 1000px;
+    height: 900px;
+    background-color: rgb(207, 209, 243);
+    border: 5px rgb(172, 176, 235) solid;
+}
+
+#link {
+    float: right;  
+}
+
+#home {
+    width:40px;
+    height: auto;
+}
+
+#help {
+    width:40px;
+    height: auto;
+}
+
+#title {
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+#p1 {
+    margin: auto;
+    width: 800px;
+    float: center;
+    padding-bottom: 70px;
+}
+
+.choice {
+    padding-top: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
+    display:inline-block;
+}
