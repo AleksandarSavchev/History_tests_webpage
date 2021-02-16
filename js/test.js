@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <label for="${"opt" + num + 4}" class="label">
     г) ${question.q_ans[3]}
 </label>
-</div>`; //vueJS, lit-html, server side
+</div>`;
     }
     let form = document.getElementById("quiz");
     fetch(`http://localhost:3000/questions`, {
@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
 let end = false;
 document.getElementById("submit").addEventListener("click", function(event) {
     event.preventDefault;
-    //<span id="endt">Сгрешени въпроси: </span><span id="errors"></span><br><br>
     const tipTemplate = (question) => {
         return `<div class="info">
         <span >${" " + question.q_text}</span><br><br>

@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             for (i in data.user) {
                 let tr = document.createElement('tr');
+                if (data.pos == i)
+                    tr.style.color = 'green';
                 tr.innerHTML = rowTemp(data.user[i], data.score[i], data.time[i], i);
                 table.appendChild(tr);
             }

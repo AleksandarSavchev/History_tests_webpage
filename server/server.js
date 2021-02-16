@@ -33,9 +33,12 @@ app.get('/rankings', (req, res) => {
         let users = [];
         let scores = [];
         let times = [];
+        let pos = -1;
         for (i in rows) {
             if (!rows[i].best_time || !rows[i].best_score)
                 continue;
+            if (rows[i].username == req.session.username)
+                pos = i;
             users.push(rows[i].username);
             scores.push(rows[i].best_score);
             times.push(rows[i].best_time);
@@ -43,7 +46,8 @@ app.get('/rankings', (req, res) => {
         return res.status(200).send({
             user: users,
             score: scores,
-            time: times
+            time: times,
+            pos: pos
         });
     }).catch(() => {
         return res.status(400).send({
