@@ -1,24 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const questionTemplate = (question, num) => {
-        return `<div class="question">
-<p class="qtext" id="${"q" + num}">${num + ". " + question.q_text}</p>
-<input type="radio" id="${"opt" + num + 1}" name="${"q" + num}" class="option" value="0"">
-<label for="${"opt" + num + 1}" class="label">
-    а) ${question.q_ans[0]}
-</label>
-<input type="radio" id="${"opt" + num + 2}" name="${"q" + num}" class="option" value="1"">
-<label for="${"opt" + num + 2}" class="label">
-    б) ${question.q_ans[1]}
-</label><br>
-<input type="radio" id="${"opt" + num + 3}" name="${"q" + num}" class="option" value="2"">
-<label for="${"opt" + num + 3}" class="label">
-    в) ${question.q_ans[2]}
-</label>
-<input type="radio" id="${"opt" + num + 4}" name="${"q" + num}" class="option" value="3"">
-<label for="${"opt" + num + 4}" class="label">
-    г) ${question.q_ans[3]}
-</label>
-</div>`;
+        let text = `<div class="question">
+        <p class="qtext" id="${"q" + num}">${num + ". " + question.q_text}</p>`;
+        let sym = ['а', 'б', 'в', ' г'];
+        for (i in question.q_ans) {
+            text += `<input type="radio" id="${"opt" + num + (parseInt(i) + 1)}" name="${"q" + num}" class="option" value="${i}">
+            <label for="${"opt" + num + (parseInt(i) + 1)}" class="label">
+            ${sym[i]}) ${question.q_ans[i]}
+            </label>`
+        }
+        return text;
     }
     let form = document.getElementById("quiz");
     fetch(`http://localhost:3000/questions`, {
