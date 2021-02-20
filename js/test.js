@@ -13,13 +13,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const openTemplate = (question, num) => {
         let text = `<div class="question">
-        <p class="qtext" id="${"q" + num}">${num + ". " + question.qq_text}</p>`;
+        <p class="qtext" id="${"q" + (parseInt(num) + 1)}">${num + ". " + question.qq_text}</p>`;
         for (i in question.qq_points) {
             text += `<label for="${"opt" + num + (parseInt(i) + 1)}">
             ${question.qq_points[i]}
         </label><input type="text" id="${"opt" + num + (parseInt(i) + 1)}" name="${"q" + num + i}">
         <br>`;
         }
+        return text;
+    }
+    const oopenTemplate = (question, num) => {
+        let text = `<div class="question">
+        <p class="qtext" id="${"q" + num}">
+        ${question.q_text[0]}<input type="text" id="${"opt" + num + 1}" name="${"q" + num + 0}">
+        ${question.q_text[1]}<input type="text" id="${"opt" + num + 2}" name="${"q" + num + 1}">
+        ${question.q_text[2]}<input type="text" id="${"opt" + num + 3}" name="${"q" + num + 2}">
+        ${question.q_text[3]}<input type="text" id="${"opt" + num + 4}" name="${"q" + num + 3}">${question.q_text[4]}
+        <br>
+    </div>`
         return text;
     }
     let form = document.getElementById("quiz");
@@ -54,6 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 div.innerHTML = openTemplate(question, i + 10);
                 form.appendChild(div);
             }
+            question = {
+                q_text: data.qq_text2,
+            }
+            let div = document.createElement('div');
+            div.innerHTML = oopenTemplate(question, 12);
+            form.appendChild(div);
+            console.log(data);
             return;
         })
         .catch(err => {
@@ -82,7 +100,11 @@ document.getElementById("submit").addEventListener("click", function (event) {
             qq_ans[i].push(form["q" + (10 + i) + j].value);
         }
     }
-    let data = { q_ans: ans, qq_ans: qq_ans};
+    qq_ans2 = [];
+    for (let j = 0; j < 4; j++) {
+        qq_ans2.push(form["q" + 12 + j].value);
+    }
+    let data = { q_ans: ans, qq_ans: qq_ans, qq_ans2: qq_ans2 };
     fetch(`http://localhost:3000/grade`, {
         method: "POST",
         headers: {

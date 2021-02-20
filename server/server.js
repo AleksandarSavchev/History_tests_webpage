@@ -78,6 +78,16 @@ app.get('/questions', (req, res) => {
             message: "Грешка в базата данни"
         });
     });
+    let qq_text2 = [];
+    let qq_ans2 = [];
+    Query('SELECT * FROM `qest_text2` ORDER BY RAND() LIMIT 1').then((rows) => {
+        qq_text2 = rows[0].q_text.split("$");
+        qq_ans2 = rows[0].q_ans.split(",");
+    }).catch(() => {
+        return res.status(400).send({
+            message: "Грешка в базата данни"
+        });
+    });
     Query('SELECT * FROM `questions` WHERE ID >= ? AND ID < ? ORDER BY RAND() LIMIT 10', 1 + 10 * req.session.diff, 15 + 10 * req.session.diff).then((rows) => {
         let q_text = [];
         let q_ans = [];
@@ -97,6 +107,7 @@ app.get('/questions', (req, res) => {
             active: true,
             pos: pos,
             qq_ans: qq_ans,
+            qq_ans2: qq_ans2,
             q_expl: q_expl,
             q_text: q_text,
             start: now
@@ -105,6 +116,7 @@ app.get('/questions', (req, res) => {
             q_text: q_text,
             q_ans: q_ans,
             qq_text: qq_text,
+            qq_text2: qq_text2,
             qq_points: qq_points
         });
     }).catch(() => {
@@ -156,6 +168,11 @@ app.post('/grade', (req, res) => {
             }
         }
     }
+    for (j in req.body.qq_ans2) {
+        if (req.session.quiz.qq_ans2[j] == req.body.qq_ans2[j] && req.body.qq_ans2[j] != '') {
+            score++;
+        }
+    }
     for (i in req.session.quiz.q_text) {
         if (req.session.quiz.pos[i] == req.body.q_ans[i] && req.body.q_ans[i] != '') {
             score++;
@@ -166,7 +183,7 @@ app.post('/grade', (req, res) => {
     }
     req.session.quiz.active = false;
     score = score * (1 + parseInt(req.session.diff));
-    let max_socre = 10 + 10 * req.session.diff + 8;
+    let max_socre = 10 + 10 * req.session.diff + 12;
     if (score > req.session.score || (score == req.session.score && req.session.time > time)) {
         Query('Update `users` SET `best_score` = ?, `best_time` = ? WHERE `username` = ?', score, time, req.session.username).then(() => {
             req.session.score = score;
