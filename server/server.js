@@ -62,6 +62,22 @@ app.get('/questions', (req, res) => {
     } else if (!req.session.diff) {
         res.sendFile(path.resolve(publicDir + "/home.html"));
     }
+    let qq_text = [];
+    let qq_ans = [];
+    let qq_points = [];
+    Query('SELECT * FROM `qest_text` ORDER BY RAND() LIMIT 2').then((rows) => {
+        for (i in rows) {
+            qq_text[i] = rows[i].q_text;
+            qq_points[i] = [];
+            qq_points[i] = rows[i].q_points.split(",");
+            qq_ans[i] = [];
+            qq_ans[i] = rows[i].q_ans.split(",");
+        }
+    }).catch(() => {
+        return res.status(400).send({
+            message: "Грешка в базата данни"
+        });
+    });
     Query('SELECT * FROM `questions` WHERE ID >= ? AND ID < ? ORDER BY RAND() LIMIT 10', 1 + 10 * req.session.diff, 15 + 10 * req.session.diff).then((rows) => {
         let q_text = [];
         let q_ans = [];
@@ -80,13 +96,16 @@ app.get('/questions', (req, res) => {
         req.session.quiz = {
             active: true,
             pos: pos,
+            qq_ans: qq_ans,
             q_expl: q_expl,
             q_text: q_text,
             start: now
         }
         return res.status(200).send({
             q_text: q_text,
-            q_ans: q_ans
+            q_ans: q_ans,
+            qq_text: qq_text,
+            qq_points: qq_points
         });
     }).catch(() => {
         return res.status(400).send({
@@ -129,6 +148,14 @@ app.post('/grade', (req, res) => {
     let start = Date.parse(req.session.quiz.start)
     let end = new Date();
     let time = Math.abs(end - start);
+    console.log(req.body)
+    for (i in req.body.qq_ans) {
+        for (j in req.body.qq_ans[i]) {
+            if (req.session.quiz.qq_ans[i][j] == req.body.qq_ans[i][j] && req.body.qq_ans[i][j] != '') {
+                score++;
+            }
+        }
+    }
     for (i in req.session.quiz.q_text) {
         if (req.session.quiz.pos[i] == req.body.q_ans[i] && req.body.q_ans[i] != '') {
             score++;
@@ -139,7 +166,7 @@ app.post('/grade', (req, res) => {
     }
     req.session.quiz.active = false;
     score = score * (1 + parseInt(req.session.diff));
-    let max_socre = 10 + 10 * req.session.diff;
+    let max_socre = 10 + 10 * req.session.diff + 8;
     if (score > req.session.score || (score == req.session.score && req.session.time > time)) {
         Query('Update `users` SET `best_score` = ?, `best_time` = ? WHERE `username` = ?', score, time, req.session.username).then(() => {
             req.session.score = score;
@@ -248,7 +275,7 @@ app.post('/logout', (req, res) => {
 
 function Query(query, ...args) {
     return new Promise((resolve, reject) => {
-        connection.query(query, args, function(err, rows) {
+        connection.query(query, args, function (err, rows) {
             if (err) reject(err);
 
             resolve(rows);
